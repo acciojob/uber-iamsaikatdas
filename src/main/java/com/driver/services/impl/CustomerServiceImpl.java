@@ -98,11 +98,12 @@ public class CustomerServiceImpl implements CustomerService {
 	public void completeTrip(Integer tripId){
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
-		int bill = trip.getCab().getPerKmRate() * trip.getDistanceInKm();
-		trip.setBill(bill);
 		trip.setStatus(TripStatus.COMPLETED);
+
+		int bill = trip.getDriver().getCab().getPerKmRate() * trip.getDistanceInKm();
+		trip.setBill(bill);
+
 		trip.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBookingRepository2.save(trip);
-
 	}
 }
