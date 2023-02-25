@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
 		// get the driver list
 		List<Driver> driverList = driverRepository2.findAll();
 		for (Driver driver1 : driverList){
-			if (driver1.getCab().isAvailable() == Boolean.TRUE){
+			if (driver1.getCab().getAvailable() == Boolean.TRUE){
 				if ((driver==null) || (driver.getDriverId()>driver1.getDriverId())){
 					driver = driver1;
 				}
@@ -69,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
 		// get the per km cost
 		int perKmCost = driver.getCab().getPerKmRate();
 		tripBooking.setBill(perKmCost);
-		tripBooking.setTripStatus(TripStatus.CONFIRMED);
+		tripBooking.setStatus(TripStatus.CONFIRMED);
 
 
 		// set the foreign key
@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public void cancelTrip(Integer tripId){
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
-		trip.setTripStatus(TripStatus.CANCELED);
+		trip.setStatus(TripStatus.CANCELED);
 		trip.setBill(0);
 		trip.getDriver().getCab().setAvailable(Boolean.TRUE);
 
@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking trip = tripBookingRepository2.findById(tripId).get();
 		int bill = trip.getCab().getPerKmRate() * trip.getDistanceInKm();
 		trip.setBill(bill);
-		trip.setTripStatus(TripStatus.COMPLETED);
+		trip.setStatus(TripStatus.COMPLETED);
 		trip.getDriver().getCab().setAvailable(Boolean.TRUE);
 		tripBookingRepository2.save(trip);
 
